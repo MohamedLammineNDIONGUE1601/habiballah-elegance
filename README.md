@@ -46,10 +46,9 @@ SITE_PHONE = "..."
 SITE_EMAIL = "..."
 ```
 
-## Compte administrateur créé pour la démo
-- Utilisateur : `admin`
-- Mot de passe : `Habiballah2026!`
-⚠️ À changer immédiatement après le premier déploiement.
+## Compte administrateur
+Créer un compte administrateur depuis le terminal avec `python manage.py createsuperuser`.
+Ne jamais versionner de mot de passe ou de secret dans ce dépôt.
 
 ## Avant la mise en production
 - Changer `SECRET_KEY` et mettre `DEBUG = False` dans `config/settings.py`
