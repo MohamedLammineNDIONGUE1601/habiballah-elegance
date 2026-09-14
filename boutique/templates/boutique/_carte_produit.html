@@ -1,0 +1,31 @@
+{% load static boutique_extras %}
+<article class="carte-produit">
+  <a href="{{ produit.get_absolute_url }}" class="cadre-image">
+    {% if produit.image_principale %}
+      <img src="{{ produit.image_principale.url }}" alt="{{ produit.nom }}" loading="lazy">
+    {% else %}
+      <img src="{% static 'images/logo.jpeg' %}" alt="{{ produit.nom }}" loading="lazy" style="object-fit:contain;background:#100e13;padding:2rem;">
+    {% endif %}
+    {% if produit.en_promo %}
+      <span class="etiquette">Promo</span>
+    {% elif produit.stock == 0 %}
+      <span class="etiquette rupture">Épuisé</span>
+    {% endif %}
+  </a>
+  <div class="infos-produit">
+    {% if produit.categorie %}<span class="categorie-label">{{ produit.categorie.nom }}</span>{% endif %}
+    <h3><a href="{{ produit.get_absolute_url }}">{{ produit.nom }}</a></h3>
+    <div class="prix-ligne">
+      <span class="prix">{{ produit.prix_actuel|fcfa }}</span>
+      {% if produit.en_promo %}<span class="prix-barre">{{ produit.prix|fcfa }}</span>{% endif %}
+    </div>
+    <form action="{% url 'boutique:panier_ajouter' produit.id %}" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="quantite" value="1">
+      <input type="hidden" name="suivant" value="{{ request.path }}">
+      <button type="submit" class="btn btn-contour btn-large" {% if produit.stock == 0 %}disabled{% endif %}>
+        {% if produit.stock == 0 %}Indisponible{% else %}Ajouter au panier{% endif %}
+      </button>
+    </form>
+  </div>
+</article>

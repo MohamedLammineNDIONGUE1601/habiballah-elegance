@@ -1,0 +1,72 @@
+{% extends "boutique/base.html" %}
+{% load static boutique_extras %}
+
+{% block titre %}Votre panier — {{ site_name }}{% endblock %}
+
+{% block contenu %}
+<section class="bloc" style="padding-top:2.5rem;">
+  <div class="container">
+    <div class="entete-section" style="text-align:left;margin-bottom:2rem;">
+      <span class="eyebrow">Étape 1 sur 2</span>
+      <h2>Votre panier</h2>
+    </div>
+
+    {% if panier %}
+      <table class="tableau-panier">
+        <thead>
+          <tr>
+            <th>Article</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Sous-total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in panier %}
+          <tr>
+            <td>
+              <div class="ligne-produit-panier">
+                {% if item.produit.image_principale %}
+                  <img src="{{ item.produit.image_principale.url }}" alt="{{ item.produit.nom }}">
+                {% else %}
+                  <img src="{% static 'images/logo.jpeg' %}" alt="{{ item.produit.nom }}" style="object-fit:contain;background:#100e13;">
+                {% endif %}
+                <div>
+                  <strong style="display:block;">{{ item.produit.nom }}</strong>
+                  {% if item.produit.categorie %}<span style="color:var(--gris-doux);font-size:.82rem;">{{ item.produit.categorie.nom }}</span>{% endif %}
+                </div>
+              </div>
+            </td>
+            <td>{{ item.prix|fcfa }}</td>
+            <td>
+              <form action="{% url 'boutique:panier_maj' item.produit.id %}" method="post" class="form-quantite-panier">
+                {% csrf_token %}
+                <div class="selecteur-quantite">
+                  <button type="button" class="moins">−</button>
+                  <input type="number" name="quantite" value="{{ item.quantite }}" min="1" max="{{ item.produit.stock }}" data-max="{{ item.produit.stock }}">
+                  <button type="button" class="plus">+</button>
+                </div>
+              </form>
+            </td>
+            <td>{{ item.sous_total|fcfa }}</td>
+            <td><a href="{% url 'boutique:panier_retirer' item.produit.id %}" class="lien-retirer">Retirer</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="recap-panier">
+        <div class="ligne-total"><span>Total</span><span>{{ panier.total|fcfa }}</span></div>
+        <a href="{% url 'boutique:commande_creer' %}" class="btn btn-or btn-large">Passer la commande</a>
+        <a href="{% url 'boutique:catalogue' %}" class="btn btn-contour btn-large" style="margin-top:.8rem;">Continuer mes achats</a>
+      </div>
+    {% else %}
+      <div class="panier-vide">
+        <p>Votre panier est vide pour le moment.</p>
+        <a href="{% url 'boutique:catalogue' %}" class="btn btn-or">Découvrir la boutique</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

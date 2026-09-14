@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block titre %}{{ site_name }} — Élégance & Modestie{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Habiballah Élégance — boutique de vêtements élégants et modestes à Médina Gounass, Matam, Sénégal.{% endblock %}">
+  <link rel="icon" href="{% static 'images/logo.jpeg' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="{% url 'boutique:accueil' %}" class="logo-lien">
+        <img src="{% static 'images/logo.jpeg' %}" alt="{{ site_name }}">
+        <span class="logo-texte">
+          <span class="nom">Habiballah</span>
+          <span class="sous">Élégance</span>
+        </span>
+      </a>
+
+      <nav class="nav-principale">
+        <a href="{% url 'boutique:accueil' %}" class="{% if request.resolver_match.url_name == 'accueil' %}actif{% endif %}">Accueil</a>
+        <a href="{% url 'boutique:catalogue' %}" class="{% if request.resolver_match.url_name == 'catalogue' or request.resolver_match.url_name == 'categorie_detail' %}actif{% endif %}">Boutique</a>
+        {% for cat in menu_categories %}
+          <a href="{% url 'boutique:categorie_detail' cat.slug %}">{{ cat.nom }}</a>
+        {% endfor %}
+        <a href="{% url 'boutique:a_propos' %}" class="{% if request.resolver_match.url_name == 'a_propos' %}actif{% endif %}">À propos</a>
+        <a href="{% url 'boutique:contact' %}" class="{% if request.resolver_match.url_name == 'contact' %}actif{% endif %}">Contact</a>
+        {% if user.is_staff %}
+          <a href="{% url 'boutique:assistant_gestion' %}" class="{% if request.resolver_match.url_name == 'assistant_gestion' %}actif{% endif %}">Assistant IA</a>
+        {% endif %}
+      </nav>
+
+      <div class="header-actions">
+        <a href="{% url 'boutique:panier_detail' %}" class="icone-panier">
+          Panier
+          <span class="badge-panier">{{ panier_global|length }}</span>
+        </a>
+        <button class="menu-burger" aria-label="Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    {% block contenu %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grille">
+        <div class="footer-marque">
+          <img src="{% static 'images/logo.jpeg' %}" alt="{{ site_name }}">
+          <p>Vêtements élégants et modestes, pensés avec soin depuis Médina Gounass. Une élégance discrète, fidèle à nos valeurs.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="{% url 'boutique:accueil' %}">Accueil</a></li>
+            <li><a href="{% url 'boutique:catalogue' %}">Boutique</a></li>
+            <li><a href="{% url 'boutique:a_propos' %}">À propos</a></li>
+            <li><a href="{% url 'boutique:contact' %}">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Catégories</h4>
+          <ul>
+            {% for cat in menu_categories %}
+              <li><a href="{% url 'boutique:categorie_detail' cat.slug %}">{{ cat.nom }}</a></li>
+            {% empty %}
+              <li><span>À venir</span></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li><span>{{ site_address }}</span></li>
+            <li><a href="tel:{{ site_phone }}">{{ site_phone }}</a></li>
+            <li><a href="mailto:{{ site_email }}">{{ site_email }}</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bas">
+        <span>© {% now "Y" %} {{ site_name }} — Tous droits réservés.</span>
+        <span>{{ site_address }}</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{% static 'js/script.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

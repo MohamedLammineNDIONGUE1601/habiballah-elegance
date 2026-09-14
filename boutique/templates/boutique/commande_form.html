@@ -1,0 +1,41 @@
+{% extends "boutique/base.html" %}
+{% load boutique_extras %}
+
+{% block titre %}Finaliser la commande — {{ site_name }}{% endblock %}
+
+{% block contenu %}
+<section class="bloc" style="padding-top:2.5rem;">
+  <div class="container">
+    <div class="entete-section" style="text-align:left;margin-bottom:2rem;">
+      <span class="eyebrow">Étape 2 sur 2</span>
+      <h2>Vos coordonnées de livraison</h2>
+    </div>
+
+    <div class="grille-form-commande">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="groupe-champ">
+            <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+            {{ field }}
+            {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+          </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-or btn-large">Confirmer la commande</button>
+        <p style="color:var(--gris-doux);font-size:.82rem;margin-top:1rem;">Le paiement se fait à la livraison ou par mobile money (Wave / Orange Money), après confirmation de votre commande par notre équipe.</p>
+      </form>
+
+      <div class="recap-panier" style="margin-left:0;max-width:none;">
+        <h3 style="margin-bottom:1rem;">Récapitulatif</h3>
+        {% for item in panier %}
+          <div style="display:flex;justify-content:space-between;font-size:.88rem;padding:.5rem 0;border-bottom:1px dashed var(--ligne);">
+            <span>{{ item.quantite }} × {{ item.produit.nom }}</span>
+            <span>{{ item.sous_total|fcfa }}</span>
+          </div>
+        {% endfor %}
+        <div class="ligne-total"><span>Total</span><span>{{ panier.total|fcfa }}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "boutique/base.html" %}
+{% load static %}
+
+{% block titre %}À propos — {{ site_name }}{% endblock %}
+
+{% block contenu %}
+<section class="page-simple">
+  <div class="container">
+    <span class="eyebrow">Notre histoire</span>
+    <h1>Habiballah Élégance</h1>
+    <p class="intro-page">
+      Née à Médina Gounass, dans la région de Matam, Habiballah Élégance est une boutique pensée pour les femmes qui souhaitent
+      allier raffinement et pudeur. Chaque pièce est choisie avec exigence, pour offrir une garde-robe élégante, confortable
+      et fidèle à nos valeurs.
+    </p>
+    <p class="intro-page">
+      Le nom « Habiballah » — bien-aimé de Dieu — porte l'esprit de la maison : une élégance sincère, loin des excès,
+      tournée vers la simplicité noble et le respect de soi.
+    </p>
+
+    {% include "boutique/_diviseur.html" %}
+
+    <div class="grille-valeurs">
+      <div class="carte-valeur">
+        <h3>Modestie</h3>
+        <p>Des coupes amples et raffinées, pensées pour la pudeur sans jamais sacrifier le style.</p>
+      </div>
+      <div class="carte-valeur">
+        <h3>Qualité</h3>
+        <p>Des tissus sélectionnés pour leur tenue, leur confort et leur durabilité au quotidien.</p>
+      </div>
+      <div class="carte-valeur">
+        <h3>Proximité</h3>
+        <p>Une boutique ancrée à Matam, à l'écoute de sa clientèle et de ses besoins.</p>
+      </div>
+    </div>
+
+    <div class="bloc-contact-grille mt-2">
+      <div class="carte-info-contact">
+        <span class="label">Adresse</span>
+        <p>{{ site_address }}</p>
+      </div>
+      <div class="carte-info-contact">
+        <span class="label">Nous rendre visite</span>
+        <p>Notre boutique vous accueille à Médina Gounass, chez la maison des Chérifs, pour découvrir la collection en personne.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

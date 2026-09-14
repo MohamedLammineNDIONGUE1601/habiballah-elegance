@@ -1,0 +1,105 @@
+{% extends "boutique/base.html" %}
+{% load static %}
+
+{% block contenu %}
+
+<section class="hero">
+  <div class="container">
+    <img src="{% static 'images/logo.jpeg' %}" alt="Habiballah Élégance" class="hero-logo">
+    <span class="eyebrow">Médina Gounass · Matam · Sénégal</span>
+    <h1>Une élégance discrète, fidèle à vos valeurs</h1>
+    <p class="accroche">Habiballah Élégance habille avec raffinement et pudeur — des pièces choisies avec soin, pensées pour la femme moderne et modeste.</p>
+    <div class="boutons">
+      <a href="{% url 'boutique:catalogue' %}" class="btn btn-or">Découvrir la boutique</a>
+      <a href="{% url 'boutique:a_propos' %}" class="btn btn-contour">Notre histoire</a>
+    </div>
+  </div>
+</section>
+
+{% include "boutique/_diviseur.html" %}
+
+<section class="bloc">
+  <div class="container">
+    <div class="entete-section">
+      <span class="eyebrow">Univers</span>
+      <h2>Nos catégories</h2>
+      <p>Chaque pièce est sélectionnée pour sa qualité, son confort et son élégance intemporelle.</p>
+    </div>
+    <div class="bandeau-categories">
+      {% for cat in categories %}
+        <a href="{{ cat.get_absolute_url }}" class="carte-categorie">
+          <span class="chiffre">{{ forloop.counter|stringformat:"02d" }}</span>
+          <h3>{{ cat.nom }}</h3>
+          <span class="desc">{{ cat.produits.count }} article{{ cat.produits.count|pluralize }}</span>
+        </a>
+      {% empty %}
+        <p class="centre" style="color:var(--gris-chaud);grid-column:1/-1;">Les catégories seront bientôt ajoutées depuis l'espace d'administration.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if coups_de_coeur %}
+<section class="bloc">
+  <div class="container">
+    <div class="entete-section">
+      <span class="eyebrow">Sélection</span>
+      <h2>Nos coups de cœur</h2>
+      <p>Les pièces que l'équipe Habiballah Élégance recommande cette saison.</p>
+    </div>
+    <div class="grille-produits">
+      {% for produit in coups_de_coeur %}
+        {% include "boutique/_carte_produit.html" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% include "boutique/_diviseur.html" %}
+
+{% if nouveautes %}
+<section class="bloc">
+  <div class="container">
+    <div class="entete-section">
+      <span class="eyebrow">Fraîchement arrivé</span>
+      <h2>Nouveautés</h2>
+    </div>
+    <div class="grille-produits">
+      {% for produit in nouveautes %}
+        {% include "boutique/_carte_produit.html" %}
+      {% endfor %}
+    </div>
+    <div class="centre mt-2">
+      <a href="{% url 'boutique:catalogue' %}" class="btn btn-contour">Voir toute la boutique</a>
+    </div>
+  </div>
+</section>
+{% else %}
+<section class="bloc centre">
+  <div class="container">
+    <p style="color:var(--gris-chaud)">Les premiers articles seront bientôt disponibles. Ajoutez vos produits depuis l'espace d'administration Django.</p>
+  </div>
+</section>
+{% endif %}
+
+<section class="bloc">
+  <div class="container">
+    <div class="grille-valeurs">
+      <div class="carte-valeur">
+        <h3>Qualité soignée</h3>
+        <p>Des matières choisies pour leur confort, leur tenue et leur élégance durable.</p>
+      </div>
+      <div class="carte-valeur">
+        <h3>Modestie & style</h3>
+        <p>Des coupes pensées pour allier pudeur et raffinement, sans jamais sacrifier l'esthétique.</p>
+      </div>
+      <div class="carte-valeur">
+        <h3>Livraison locale</h3>
+        <p>Commandez depuis Matam et ses environs, avec un service attentif et personnalisé.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

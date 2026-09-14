@@ -1,0 +1,42 @@
+{% extends "boutique/base.html" %}
+
+{% block titre %}Contact — {{ site_name }}{% endblock %}
+
+{% block contenu %}
+<section class="page-simple">
+  <div class="container">
+    <span class="eyebrow">Restons en contact</span>
+    <h1>Contactez-nous</h1>
+    <p class="intro-page">Une question sur un article, une commande ou une visite en boutique ? Écrivez-nous, nous vous répondrons rapidement.</p>
+
+    <div class="bloc-contact-grille">
+      <div>
+        <div class="carte-info-contact">
+          <span class="label">Adresse</span>
+          <p>{{ site_address }}</p>
+        </div>
+        <div class="carte-info-contact">
+          <span class="label">Téléphone</span>
+          <p><a href="tel:{{ site_phone }}">{{ site_phone }}</a></p>
+        </div>
+        <div class="carte-info-contact">
+          <span class="label">Email</span>
+          <p><a href="mailto:{{ site_email }}">{{ site_email }}</a></p>
+        </div>
+      </div>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% for field in form %}
+          <div class="groupe-champ">
+            <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+            {{ field }}
+            {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+          </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-or btn-large">Envoyer le message</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "boutique/base.html" %}
+
+{% block titre %}Assistant de gestion — {{ site_name }}{% endblock %}
+
+{% block contenu %}
+<section class="assistant-page" data-assistant-api="{% url 'boutique:assistant_gestion_api' %}">
+  <div class="container">
+    <div class="assistant-entete">
+      <div>
+        <span class="eyebrow">Espace équipe</span>
+        <h1>Assistant de gestion</h1>
+        <p>Un regard rapide sur vos produits, commandes et messages clients.</p>
+      </div>
+      <a class="btn btn-contour" href="{% url 'admin:index' %}">Administration Django</a>
+    </div>
+
+    <div class="assistant-stats">
+      <div class="assistant-stat"><span>Produits visibles</span><strong>{{ donnees.produits_disponibles }}</strong><small>sur {{ donnees.produits }}</small></div>
+      <div class="assistant-stat"><span>Commandes en attente</span><strong>{{ donnees.commandes_attente }}</strong><small>sur {{ donnees.commandes }}</small></div>
+      <div class="assistant-stat"><span>Messages à traiter</span><strong>{{ donnees.messages_non_traites }}</strong><small>dans Contact</small></div>
+      <div class="assistant-stat"><span>Stock à surveiller</span><strong>{{ donnees.stock_faible|length }}</strong><small>3 unités ou moins</small></div>
+    </div>
+
+    <div class="assistant-grille">
+      <div class="assistant-conversation">
+        <div class="assistant-conversation-entete">
+          <div class="assistant-avatar">HE</div>
+          <div><strong>Conseiller boutique</strong><span>Analyse des données actuelles</span></div>
+          <span class="assistant-indicateur">En ligne</span>
+        </div>
+        <div class="assistant-messages" aria-live="polite">
+          <div class="assistant-message assistant-message-agent">Bonjour. Que souhaitez-vous vérifier dans la gestion de la boutique ?</div>
+        </div>
+        <form class="assistant-form">
+          {% csrf_token %}
+          <label class="sr-only" for="assistant-question">Votre question</label>
+          <input id="assistant-question" name="question" maxlength="500" autocomplete="off" placeholder="Ex. Quels produits ont un stock faible ?" required>
+          <button class="btn btn-or" type="submit">Envoyer</button>
+        </form>
+        <div class="assistant-suggestions">
+          <button type="button" data-question="Fais-moi un bilan de la boutique">Bilan</button>
+          <button type="button" data-question="Quels produits ont un stock faible ?">Stock faible</button>
+          <button type="button" data-question="Combien de commandes sont en attente ?">Commandes</button>
+          <button type="button" data-question="Ai-je des messages clients non traités ?">Messages clients</button>
+        </div>
+      </div>
+
+      <aside class="assistant-actions">
+        <span class="eyebrow">À surveiller</span>
+        <h2>Stock faible</h2>
+        {% for produit in donnees.stock_faible %}
+          <a class="assistant-produit" href="{% url 'admin:boutique_produit_change' produit.pk %}">
+            <span>{{ produit.nom }}</span><strong>{{ produit.stock }}</strong>
+          </a>
+        {% empty %}
+          <p class="assistant-vide">Aucun stock critique pour le moment.</p>
+        {% endfor %}
+        <a class="btn btn-contour btn-large" href="{% url 'admin:boutique_produit_changelist' %}">Gérer les produits</a>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}

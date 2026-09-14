@@ -1,0 +1,34 @@
+{% extends "boutique/base.html" %}
+{% load boutique_extras %}
+
+{% block titre %}Commande confirmée — {{ site_name }}{% endblock %}
+
+{% block contenu %}
+<section class="bloc centre" style="padding-top:3.5rem;">
+  <div class="container">
+    <span class="eyebrow">Merci {{ commande.nom_complet }}</span>
+    <h1>Votre commande #{{ commande.id }} a bien été enregistrée</h1>
+    <p style="color:var(--gris-chaud);max-width:52ch;margin:0 auto 2rem;">
+      Notre équipe vous contactera très bientôt au {{ commande.telephone }} pour confirmer la livraison à {{ commande.ville }}, in cha Allah.
+    </p>
+
+    {% include "boutique/_diviseur.html" %}
+
+    <div class="recap-panier" style="margin:0 auto;text-align:left;">
+      <h3 style="margin-bottom:1rem;">Détails de la commande</h3>
+      {% for ligne in commande.lignes.all %}
+        <div style="display:flex;justify-content:space-between;font-size:.88rem;padding:.5rem 0;border-bottom:1px dashed var(--ligne);">
+          <span>{{ ligne.quantite }} × {{ ligne.nom_produit }}</span>
+          <span>{{ ligne.sous_total|fcfa }}</span>
+        </div>
+      {% endfor %}
+      <div class="ligne-total"><span>Total</span><span>{{ commande.total|fcfa }}</span></div>
+    </div>
+
+    <div class="boutons mt-2">
+      <a href="{% url 'boutique:catalogue' %}" class="btn btn-or">Continuer mes achats</a>
+      <a href="{% url 'boutique:accueil' %}" class="btn btn-contour">Retour à l'accueil</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
